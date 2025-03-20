@@ -1,6 +1,7 @@
 using NodeCanvas.Framework;
 using ParadoxNotion.Design;
 using UnityEngine;
+using UnityEngine.AI;
 
 
 namespace NodeCanvas.Tasks.Conditions {
@@ -8,6 +9,9 @@ namespace NodeCanvas.Tasks.Conditions {
 	public class CookingCT : ConditionTask {
 
 		public BBParameter<Transform> stovePosition;
+		public BBParameter<NavMeshAgent> navAgent;
+		public BBParameter<bool> hasMeal;
+		public GameObject fire;
 
         //Use for initialization. This is called only once in the lifetime of the task.
         //Return null if init was successfull. Return an error string otherwise
@@ -28,7 +32,23 @@ namespace NodeCanvas.Tasks.Conditions {
 		//Called once per frame while the condition is active.
 		//Return whether the condition is success or failure.
 		protected override bool OnCheck() {
-			return true;
+			if (hasMeal.value)
+				return true;
+
+			if (!fire.activeInHierarchy)
+			{
+				navAgent.value.SetDestination(stovePosition.value.position);
+				
+			}
+
+			if (!navAgent.value.pathPending && navAgent.value.remainingDistance < 0.2f)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 	}
 }
