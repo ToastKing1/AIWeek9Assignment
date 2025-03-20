@@ -12,6 +12,7 @@ namespace NodeCanvas.Tasks.Actions {
 		public BBParameter<Transform> counterPosition;
 		public BBParameter<NavMeshAgent> navAgent;
 		public BBParameter<bool> hasMeal;
+		public GameObject fire;
 		public float timer = 0;
 		public float timerLimit = 5;
 
@@ -37,8 +38,22 @@ namespace NodeCanvas.Tasks.Actions {
 
 				if (timer > timerLimit)
 				{
-					hasMeal.value = true;
-					navAgent.value.SetDestination(counterPosition.value.position);
+					float burnChance = Random.Range(0, 100);
+					Debug.Log(burnChance);
+					if (burnChance < 50)
+					{
+						hasMeal.value = false;
+						fire.SetActive(true);
+                        EndAction(true);
+                    }
+					else
+					{
+                        navAgent.value.SetDestination(counterPosition.value.position);
+                        hasMeal.value = true;
+						EndAction(true);
+                    }
+					timer = 0;
+					
 				}
 			}
 		}

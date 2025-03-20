@@ -57,6 +57,7 @@ namespace NodeCanvas.Tasks.Actions {
 				if (timer >= timerLimit)
 				{
 					fire.SetActive(false);
+					timer = 0;
 				}
             }
 

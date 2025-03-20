@@ -11,6 +11,8 @@ namespace NodeCanvas.Tasks.Conditions {
 		public BBParameter<Transform> stovePosition;
 		public BBParameter<NavMeshAgent> navAgent;
 		public BBParameter<bool> hasMeal;
+		public BBParameter<GameObject> servedMeal;
+		public BBParameter<Transform> idlePosition;
 		public GameObject fire;
 
         //Use for initialization. This is called only once in the lifetime of the task.
@@ -32,6 +34,12 @@ namespace NodeCanvas.Tasks.Conditions {
 		//Called once per frame while the condition is active.
 		//Return whether the condition is success or failure.
 		protected override bool OnCheck() {
+			if (servedMeal.value.activeInHierarchy)
+			{
+				navAgent.value.SetDestination(idlePosition.value.position);
+                return false;
+            }
+				
 			if (hasMeal.value)
 				return true;
 
